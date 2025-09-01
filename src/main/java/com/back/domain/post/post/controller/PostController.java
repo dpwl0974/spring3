@@ -16,12 +16,10 @@ public class PostController {
         this.postService = postService;
     }
 
-    //처리
-    @GetMapping("/posts/write")
-    @ResponseBody
-    public String write() {
-
+    private String getWriteFormHtml(String errorMessage){
         return """
+                <div style="color:red">%s</div>
+                
                 <form method="POST" action="/posts/doWrite">
                   <input type="text" name="title">
                   <br>
@@ -29,7 +27,15 @@ public class PostController {
                   <br>
                   <input type="submit" value="작성">
                 </form>
-                """;
+                """.formatted(errorMessage);
+
+    }
+    //처리
+    @GetMapping("/posts/write")
+    @ResponseBody
+    public String write() {
+
+        return getWriteFormHtml("");
     }
 
     @PostMapping("/posts/doWrite")
@@ -38,6 +44,9 @@ public class PostController {
             String title,
             String content
     ) {
+
+        if(title.isBlank()) return getWriteFormHtml("제목을 입력해주세요.");
+        if(content.isBlank()) return getWriteFormHtml("내용을 입력해주세요.");
 
         Post post = postService.write(title, content);
 
