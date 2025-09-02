@@ -9,13 +9,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@Validated
 public class PostController {
 
     private final PostService postService;
@@ -45,41 +44,48 @@ public class PostController {
                     }
                 </script>
                 """.formatted(errorMessage, title, content, errorFieldName);
-
-    }
-    //처리
-    @GetMapping("/posts/write")
-    @ResponseBody
-    public String write() {
-
-        return getWriteFormHtml("", "", "", "");
     }
 
     @AllArgsConstructor
     @Getter
     public static class PostWriteForm {
-        @NotBlank
-        @Size(min = 2, max = 10)
+        @NotBlank(message = "제목을 입력해주세요.")
+        @Size(min = 2, max = 10, message = "제목은 2글자 이상 10글자 이하로 입력해주세요.")
         private String title;
 
-        @NotBlank
-        @Size(min = 2, max = 100)
+        @NotBlank(message = "내용을 입력해주세요.")
+        @Size(min = 2, max = 100, message = "내용은 2글자 이상 100글자 이하로 입력해주세요.")
         private String content;
+    }
+
+
+    @GetMapping("/posts/write")
+    @ResponseBody
+    public String write() {
+        return getWriteFormHtml("", "", "", "");
     }
 
     @PostMapping("/posts/doWrite")
     @ResponseBody
-    public String doWrite(@Valid PostWriteForm form, BindingResult bindingResult) {
-//
-//        if(title.isBlank()) return getWriteFormHtml("제목을 입력해주세요.", title, content, "title");
-//        if(title.length() < 2) return getWriteFormHtml("제목은 2글자 이상 작성해주세요.", title, content, "title");
-//        if(title.length() > 10) return getWriteFormHtml("제목은 10글자 이상 넘을 수 없습니다.", title, content, "title");
-//
-//        if(content.isBlank()) return getWriteFormHtml("내용을 입력해주세요.", title, content, "content");
-//        if(content.length() < 2) return
+    public String doWrite(
+            @Valid PostWriteForm form,
+            BindingResult bindingResult
+    ) {
 
+        if(bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+            String fieldName = fieldError.getField();
+            String errorMessage = fieldError.getDefaultMessage();
+
+            System.out.println("fieldName : " + fieldName);
+            System.out.println("errorMessage : " + errorMessage);
+
+            return getWriteFormHtml(errorMessage, form.title, form.content, fieldName);
+
+        }
         Post post = postService.write(form.title, form.content);
 
         return "%d번 글이 작성되었습니다.".formatted(post.getId());
     }
+
 }
