@@ -21,7 +21,7 @@ public class PostController {
                 <div style="color:red">%s</div>
                 
                 <form method="POST" action="/posts/doWrite">
-                  <input type="text" name="title" value="%s">
+                  <input type="text" name="title" value="%s" autoFocus>
                   <br>
                   <textarea name="content">%s</textarea>
                   <br>
