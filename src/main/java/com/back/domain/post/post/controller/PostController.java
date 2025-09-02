@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,9 +25,11 @@ public class PostController {
         this.postService = postService;
     }
 
-    private String getWriteFormHtml(String errorMessage, String title, String content, String errorFieldName) {
+    private String getWriteFormHtml(String errorMessage, String title, String content) {
         return """
-                <div style="color:red">%s</div>
+                <ul style="color:red">
+                    %s
+                </ul>
                 
                 <form method="POST" action="/posts/doWrite">
                   <input type="text" name="title" value="%s" autoFocus>
@@ -39,25 +40,26 @@ public class PostController {
                 </form>
                 
                 <script>
-                    const errorFieldName = "%s";
+                    const li = document.querySelector("ul li");
+                    const errorFieldName = li.dataset.errorFieldName;
                     
                     if(errorFieldName.length > 0) {
                         const form = document.querySelector("form");
                         form[errorFieldName].focus();
                     }
                 </script>
-                """.formatted(errorMessage, title, content, errorFieldName);
+                """.formatted(errorMessage, title, content);
     }
 
     @AllArgsConstructor
     @Getter
     public static class PostWriteForm {
-        @NotBlank(message = "1. 제목을 입력해주세요.")
-        @Size(min = 2, max = 10, message = "2. 제목은 2글자 이상 10글자 이하로 입력해주세요.")
+        @NotBlank(message = "1-제목을 입력해주세요.")
+        @Size(min = 2, max = 10, message = "2-제목은 2글자 이상 10글자 이하로 입력해주세요.")
         private String title;
 
-        @NotBlank(message = "3. 내용을 입력해주세요.")
-        @Size(min = 2, max = 100, message = "4. 내용은 2글자 이상 100글자 이하로 입력해주세요.")
+        @NotBlank(message = "3-내용을 입력해주세요.")
+        @Size(min = 2, max = 100, message = "4-내용은 2글자 이상 100글자 이하로 입력해주세요.")
         private String content;
     }
 
@@ -65,7 +67,7 @@ public class PostController {
     @GetMapping("/posts/write")
     @ResponseBody
     public String write() {
-        return getWriteFormHtml("", "", "", "");
+        return getWriteFormHtml("", "", "");
     }
 
     @PostMapping("/posts/doWrite")
@@ -75,16 +77,18 @@ public class PostController {
     ) {
 
         if(bindingResult.hasErrors()) {
-
-            String fieldName = "title";
-
+            // 스트림
             String errorMessages = bindingResult.getFieldErrors()
                     .stream()
-                    .map(FieldError::getDefaultMessage)
+                    .map(field -> field.getField() + "-" + field.getDefaultMessage())
+                    .map(message -> message.split("-"))
+                    .map(bits -> """
+                            <!-- %s --><li data-error-field-name="%s">%s</li>
+                            """.formatted(bits[1], bits[0], bits[2]))
                     .sorted()
-                    .collect(Collectors.joining("<br>"));
+                    .collect(Collectors.joining("\n"));
 
-            return getWriteFormHtml(errorMessages, form.title, form.content, fieldName);
+            return getWriteFormHtml(errorMessages, form.title, form.content);
         }
         Post post = postService.write(form.title, form.content);
 
