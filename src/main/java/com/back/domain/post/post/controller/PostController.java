@@ -2,8 +2,11 @@ package com.back.domain.post.post.controller;
 
 import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,12 +54,21 @@ public class PostController {
         return getWriteFormHtml("", "", "", "");
     }
 
+    @AllArgsConstructor
+    @Getter
+    public static class PostWriteForm {
+        @NotBlank
+        @Size(min = 2, max = 10)
+        private String title;
+
+        @NotBlank
+        @Size(min = 2, max = 100)
+        private String content;
+    }
+
     @PostMapping("/posts/doWrite")
     @ResponseBody
-    public String doWrite(
-            @NotBlank @Size(min=2, max=10) String title,
-            @NotBlank @Size(min=2, max=100) String content
-    ) {
+    public String doWrite(@Valid PostWriteForm form) {
 //
 //        if(title.isBlank()) return getWriteFormHtml("제목을 입력해주세요.", title, content, "title");
 //        if(title.length() < 2) return getWriteFormHtml("제목은 2글자 이상 작성해주세요.", title, content, "title");
@@ -65,7 +77,7 @@ public class PostController {
 //        if(content.isBlank()) return getWriteFormHtml("내용을 입력해주세요.", title, content, "content");
 //        if(content.length() < 2) return
 
-        Post post = postService.write(title, content);
+        Post post = postService.write(form.title, form.content);
 
         return "%d번 글이 작성되었습니다.".formatted(post.getId());
     }
