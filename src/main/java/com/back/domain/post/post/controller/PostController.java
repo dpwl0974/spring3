@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -88,6 +89,7 @@ public class PostController {
         return "post/modify";
     }
 
+    @Transactional
     @PostMapping("/posts/{id}/modify")
     public String doModify(
             @PathVariable Long id,
