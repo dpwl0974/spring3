@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+
 @Controller
 public class PostController {
 
@@ -89,8 +90,8 @@ public class PostController {
         return "post/modify";
     }
 
-    @Transactional
     @PostMapping("/posts/{id}/modify")
+    @Transactional
     public String doModify(
             @PathVariable Long id,
             @ModelAttribute("form") @Valid PostModifyForm form,

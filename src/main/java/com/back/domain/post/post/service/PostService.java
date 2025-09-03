@@ -11,6 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
     private final PostRepository postRepository;
 
     public Post write(String title, String content) {
