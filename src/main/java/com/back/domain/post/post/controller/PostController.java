@@ -54,7 +54,7 @@ public class PostController {
 
         Post post = postService.write(form.title, form.content);
         model.addAttribute("id", post.getId());
-        return "redirect:/posts/write"; // 주소창을 바꿔
+        return "redirect:/posts/%d".formatted(post.getId()); // 주소창을 바꿔
     }
 
     @GetMapping("/posts/{id}")
