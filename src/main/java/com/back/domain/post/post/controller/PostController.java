@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.stream.Collectors;
-
 
 @Controller
 public class PostController {
@@ -51,19 +49,6 @@ public class PostController {
     ) {
 
         if(bindingResult.hasErrors()) {
-            // 스트림
-            String errorMessages = bindingResult.getFieldErrors()
-                    .stream()
-                    .map(field -> field.getField() + "-" + field.getDefaultMessage())
-                    .map(message -> message.split("-"))
-                    .map(bits -> """
-                            <!-- %s --><li data-error-field-name="%s">%s</li>
-                            """.formatted(bits[1], bits[0], bits[2]))
-                    .sorted()
-                    .collect(Collectors.joining("\n"));
-
-            model.addAttribute("errorMessages", errorMessages);
-
             return "post/write";
         }
         Post post = postService.write(form.title, form.content);
