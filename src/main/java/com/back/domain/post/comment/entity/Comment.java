@@ -18,4 +18,8 @@ public class Comment extends BaseEntity {
 
     @ManyToOne //Many -> 외래키 부여
     private Post post;
+
+    public void update(String content) {
+        this.content = content;
+    }
 }

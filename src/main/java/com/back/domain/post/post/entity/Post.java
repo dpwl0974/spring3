@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @NoArgsConstructor
@@ -20,9 +21,6 @@ public class Post extends BaseEntity {
     private String title;
     private String content;
 
-    // mappedBy -> 외래키 줘야할 진짜는 post다 알려줌
-    // cascade -> 부모 추가되거나 삭제되면 자식도 같이 (트랜잭셔널 안에서만 작용)
-    // fetch.Lazy -> 필요한 순간에 나중에
     @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval=true, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
@@ -37,9 +35,6 @@ public class Post extends BaseEntity {
     }
 
     public Comment addComment(String content) {
-
-        // this = post (부모)
-        // post와 comment는 함께이므로 추가
         Comment comment = new Comment(content, this);
         this.comments.add(comment);
 
@@ -47,9 +42,19 @@ public class Post extends BaseEntity {
     }
 
     public void deleteComment(Long commentId) {
-        comments.stream()
+        Comment comment = findCommentById(commentId).get();
+        this.comments.remove(comment);
+    }
+
+    public Comment updateComment(Long commentId, String content) {
+        Comment comment = findCommentById(commentId).get();
+        comment.update(content);
+        return comment;
+    }
+
+    public Optional<Comment> findCommentById(Long commentId) {
+        return comments.stream()
                 .filter(c -> c.getId().equals(commentId))
-                .findFirst()
-                .ifPresent(comments::remove);
+                .findFirst();
     }
 }

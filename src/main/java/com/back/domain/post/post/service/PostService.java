@@ -42,4 +42,7 @@ public class PostService {
     public void deleteComment(Post post, Long commentId) {
         post.deleteComment(commentId);
     }
+    public void modifyComment(Post post, Long commentId, String content) {
+        post.updateComment(commentId, content);
+    }
 }

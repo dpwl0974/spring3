@@ -44,7 +44,7 @@ public class PostController {
 
     @GetMapping("/posts/write")
     public String write(@ModelAttribute("form") PostWriteForm form) {
-        return "post/write";
+        return "post/post/write";
     }
 
     @PostMapping("/posts/write")
@@ -54,7 +54,7 @@ public class PostController {
     ) {
 
         if(bindingResult.hasErrors()) {
-            return "post/write";
+            return "post/post/write";
         }
 
         Post post = postService.write(form.title, form.content);
@@ -88,7 +88,7 @@ public class PostController {
         form.setContent(post.getContent());
 
         model.addAttribute("post", post);
-        return "post/modify";
+        return "post/post/modify";
     }
 
     @PostMapping("/posts/{id}/modify")
@@ -96,14 +96,17 @@ public class PostController {
     public String doModify(
             @PathVariable Long id,
             @ModelAttribute("form") @Valid PostModifyForm form,
-            BindingResult bindingResult
+            BindingResult bindingResult,
+            Model model
     ) {
 
+        Post post = postService.findById(id).get();
+
         if(bindingResult.hasErrors()) {
-            return "post/modify";
+            model.addAttribute("post", post);
+            return "post/post/modify";
         }
 
-        Post post = postService.findById(id).get();
         postService.modify(post, form.title, form.content);
 
         return "redirect:/posts/%d".formatted(post.getId());
@@ -117,7 +120,7 @@ public class PostController {
         Post post = postService.findById(id).get();
         model.addAttribute("post", post);
 
-        return "post/detail";
+        return "post/post/detail";
     }
 
     @GetMapping("/posts")
@@ -126,6 +129,6 @@ public class PostController {
 
         List<Post> posts = postService.findAll();
         model.addAttribute("posts", posts);
-        return "post/list";
+        return "post/post/list";
     }
 }
