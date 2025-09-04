@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.io.Reader;
 import java.util.List;
 
 @Controller
@@ -110,7 +111,8 @@ public class PostController {
 
 
     @GetMapping("/posts/{id}")
-    public String detail(@PathVariable Long id, Model model) {
+    @Transactional(readOnly = true)
+    public String detail(@PathVariable Long id, Model model, Reader reader) {
 
         Post post = postService.findById(id).get();
         model.addAttribute("post", post);
@@ -119,6 +121,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
+    @Transactional(readOnly = true)
     public String list(Model model) {
 
         List<Post> posts = postService.findAll();
