@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -26,6 +27,19 @@ public class CommentController {
         @NotBlank(message = "댓글 내용을 입력해주세요.")
         @Size(min = 2, max = 100, message = "댓글 내용은 2글자 이상 100글자 이하로 입력해주세요.")
         private String content;
+    }
+
+    @GetMapping("/posts/{postId}/comments/{commentId}/delete")
+    @Transactional
+    public String delete(
+            @PathVariable Long postId,
+            @PathVariable Long commentId
+    ) {
+
+        Post post = postService.findById(postId).get();
+        postService.deleteComment(post, commentId);
+
+        return "redirect:/posts/" + postId;
     }
 
     @PostMapping("/posts/{postId}/comments/write")
