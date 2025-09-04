@@ -5,11 +5,13 @@ import com.back.global.jpa.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @AllArgsConstructor // 내가 사용 용도
 @NoArgsConstructor // JPA가 사용 용도
+@Getter
 public class Comment extends BaseEntity {
 
     private String content;
