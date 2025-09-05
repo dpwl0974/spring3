@@ -1,8 +1,6 @@
 <html lang="ko" layout:decorate="~{layout}">
 <th:block layout:fragment="content">
-    <form method="POST" th:object="${form}">
-
-        <div th:replace="~{post/post/form_errors :: formErrorsFragment}"></div>
+    <form method="POST" th:action th:object="${form}">
 
         <div>
             <label for="">제목</label>
