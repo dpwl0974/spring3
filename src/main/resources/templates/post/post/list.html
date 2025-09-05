@@ -1,5 +1,7 @@
 <html lang="ko" layout:decorate="~{layout}">
-<div layout:fragment="content">
+    <head>
+        <title>글 목록</title>
+    </head>
     <h1>글 목록</h1>
     <ul>
         <li th:each="post : ${posts}">
