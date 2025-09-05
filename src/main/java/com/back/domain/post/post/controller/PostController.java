@@ -100,6 +100,18 @@ public class PostController {
         return "redirect:/posts/%d".formatted(post.getId());
     }
 
+    @DeleteMapping("/posts/{id}")
+    @Transactional
+    public String doDelete(
+            @PathVariable Long id
+    ) {
+
+        Post post = postService.findById(id).get();
+        postService.delete(post);
+
+        return "redirect:/posts";
+
+    }
 
     @GetMapping("/posts/{id}")
     @Transactional(readOnly = true)
