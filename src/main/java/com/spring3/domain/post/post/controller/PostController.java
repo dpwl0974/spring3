@@ -1,7 +1,7 @@
-package com.back.domain.post.post.controller;
+package com.spring3.domain.post.post.controller;
 
-import com.back.domain.post.post.entity.Post;
-import com.back.domain.post.post.service.PostService;
+import com.spring3.domain.post.post.entity.Post;
+import com.spring3.domain.post.post.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Reader;
 import java.util.List;
+
 @Controller
 public class PostController {
 
@@ -112,6 +113,7 @@ public class PostController {
         return "redirect:/posts";
 
     }
+
 
     @GetMapping("/posts/{id}")
     @Transactional(readOnly = true)

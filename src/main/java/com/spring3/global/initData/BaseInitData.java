@@ -1,8 +1,7 @@
-package com.back.global.initData;
+package com.spring3.global.initData;
 
-
-import com.back.domain.post.post.entity.Post;
-import com.back.domain.post.post.service.PostService;
+import com.spring3.domain.post.post.entity.Post;
+import com.spring3.domain.post.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -23,7 +22,9 @@ public class BaseInitData {
     @Bean
     ApplicationRunner initDataRunner() {
         return args -> {
+
             self.work1();
+
         };
 
     }

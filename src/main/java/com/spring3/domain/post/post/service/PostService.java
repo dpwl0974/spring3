@@ -1,7 +1,7 @@
-package com.back.domain.post.post.service;
+package com.spring3.domain.post.post.service;
 
-import com.back.domain.post.post.entity.Post;
-import com.back.domain.post.post.repository.PostRepository;
+import com.spring3.domain.post.post.entity.Post;
+import com.spring3.domain.post.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +42,7 @@ public class PostService {
     public void deleteComment(Post post, Long commentId) {
         post.deleteComment(commentId);
     }
+
     public void modifyComment(Post post, Long commentId, String content) {
         post.updateComment(commentId, content);
     }

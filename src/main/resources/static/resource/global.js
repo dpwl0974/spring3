@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
     // a 태그에 method와 onclick 속성이 같이 있는 경우 onclick 속성을 data-onclick으로 이동
     document.querySelectorAll("a[method][onclick]").forEach((anchor) => {

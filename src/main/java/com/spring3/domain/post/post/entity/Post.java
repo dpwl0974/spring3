@@ -1,7 +1,7 @@
-package com.back.domain.post.post.entity;
+package com.spring3.domain.post.post.entity;
 
-import com.back.domain.post.comment.entity.Comment;
-import com.back.global.jpa.entity.BaseEntity;
+import com.spring3.domain.post.comment.entity.Comment;
+import com.spring3.global.jpa.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 
 @NoArgsConstructor
 @Getter

@@ -1,5 +1,4 @@
-package com.back.global.jpa.entity;
-
+package com.spring3.global.jpa.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
