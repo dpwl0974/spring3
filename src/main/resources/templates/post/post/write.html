@@ -1,27 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form method="POST"  th:object="${form}">
+<html lang="ko" layout:decorate="~{layout}">
+<th:block layout:fragment="content">
+    <form method="POST" th:object="${form}">
 
-    <div th:replace="~{post/post/form_errors :: formErrorsFragment}"></div>
+        <div th:replace="~{post/post/form_errors :: formErrorsFragment}"></div>
 
-    <div>
-        <label for="">제목</label>
         <div>
-            <input type="text" placeholder="제목을 입력해주세요." th:field="*{title}" autoFocus>
+            <label for="">제목</label>
+            <div>
+                <input type="text" placeholder="제목을 입력해주세요." th:field="*{title}" autoFocus>
+            </div>
         </div>
-    </div>
-    <div>
-        <label for="">내용</label>
         <div>
-            <textarea placeholder="내용을 입력해주세요." th:field="*{content}"></textarea>
+            <label for="">내용</label>
+            <div>
+                <textarea placeholder="내용을 입력해주세요." th:field="*{content}"></textarea>
+            </div>
         </div>
-    </div>
-    <input type="submit" value="작성">
-</form>
-</body>
+        <input type="submit" value="작성">
+    </form>
+</th:block>
 </html>
